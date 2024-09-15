@@ -1,4 +1,4 @@
-module github.com/nolanjannotta/personal_site_go_server
+module github.com/nolanjannotta/personal_go_server
 
 go 1.23.1
 

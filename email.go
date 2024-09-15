@@ -50,13 +50,9 @@ func sendEmail(msg []byte) {
 	fromAddress := os.Getenv("EMAIL_ADDRESS")
 	personalEmail := os.Getenv("PERSONAL_EMAIL")
 
-	// fmt.Println(password)
-	// fmt.Println(fromAddress)
-
 	auth := smtp.PlainAuth("", fromAddress, password, "smtp.gmail.com")
 
 	to := []string{personalEmail}
-	// msg := []byte("Subject: ***SENT FROM WEBSITE***\r\n" + "\r\n" + "whats good shorty")
 
 	err := smtp.SendMail("smtp.gmail.com:587", auth, fromAddress, to, msg)
 
