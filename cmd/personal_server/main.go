@@ -25,7 +25,9 @@ import (
 	"github.com/charmbracelet/wish/activeterm"
 	"github.com/charmbracelet/wish/bubbletea"
 	"github.com/charmbracelet/wish/logging"
-	"github.com/nolanjannotta/personal_go_server/pkg/email"
+
+	"github.com/nolanjannotta/personal_go_server/pkg/httpServer"
+	"github.com/nolanjannotta/personal_go_server/pkg/sshApp"
 )
 
 const (
@@ -34,68 +36,37 @@ const (
 )
 
 func main() {
-	httpServer := setUpHttpServer()
-	sshServer := setUpSSHServer()
+	http_server := httpServer.SetUp()
+	ssh_app := sshApp.SetUp()
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-	log.Info("Starting SSH server", "host", host, "port", port)
-	go func() {
-		if err := sshServer.ListenAndServe(); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
-			log.Error("Could not start server", "error", err)
-			done <- nil
-		}
-	}()
+	// log.Info("Starting SSH server", "host", host, "port", port)
+	// go func() {
+	// 	if err := sshServer.ListenAndServe(); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
+	// 		log.Error("Could not start server", "error", err)
+	// 		done <- nil
+	// 	}
+	// }()
 
-	log.Info("Starting HTTP server", "host", "localhost", "port", 8080)
-	go func() {
-		if err := httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Error("Could not start server", "error", err)
-			done <- nil
-		}
-	}()
+	go sshApp.Start(ssh_app, done)
+
+	go httpServer.Start(http_server, done)
 
 	<-done
+
 	log.Info("Stopping servers")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer func() { cancel() }()
 
-	if err := sshServer.Shutdown(ctx); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
+	if err := ssh_app.Shutdown(ctx); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
 		log.Error("Could not stop server", "error", err)
 	}
-	if err := httpServer.Shutdown(ctx); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
+	if err := http_server.Shutdown(ctx); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
 		log.Error("Could not stop server", "error", err)
 	}
 
-}
-
-func setUpHttpServer() *http.Server {
-	// var server http.Server
-
-	mux := http.NewServeMux()
-
-	fs := http.FileServer(http.Dir("./static"))
-	mux.Handle("/", fs)
-	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("healthy")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
-	})
-	mux.HandleFunc("POST /email", HandleEmail)
-
-	s := &http.Server{
-		Addr:    ":8080",
-		Handler: mux,
-		// ReadTimeout:    10 * time.Second,
-		// WriteTimeout:   10 * time.Second,
-		// MaxHeaderBytes: 1 << 20,
-	}
-
-	return s
-
-	// fmt.Println("Server is running on port 8080")
-	// http.ListenAndServe(":8080", nil)
 }
 
 func setUpSSHServer() *ssh.Server {
@@ -104,7 +75,7 @@ func setUpSSHServer() *ssh.Server {
 		wish.WithHostKeyPath(".ssh/id_ed25519"),
 		wish.WithMiddleware(
 			bubbletea.Middleware(teaHandler),
-			activeterm.Middleware(), // Bubble Tea apps usually require a PTY.
+			activeterm.Middleware(),
 			logging.Middleware(),
 		),
 	)
@@ -170,14 +141,14 @@ func (m *model) updateInputs(msg tea.Msg) tea.Cmd {
 	return tea.Batch(cmds...)
 }
 
-func (m *model) createEmailBody() {
+func (m *model) sendEmail() {
 
 	if m.textInput[0].Value() == "" || m.textInput[1].Value() == "" || m.textArea.Value() == "" {
 		m.emailSuccessMsg = "ERROR: please fill out all fields before sending an email"
 		return
 	}
 
-	email := Email{
+	email := httpServer.Email{
 		From: m.textInput[0].Value(),
 		Name: m.textInput[1].Value(),
 		Msg:  m.textArea.Value(),
@@ -222,7 +193,6 @@ func (m *model) createEmailBody() {
 }
 
 func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
-	// This should never fail, as we are using the activeterm middleware.
 	pty, _, _ := s.Pty()
 
 	renderer := bubbletea.MakeRenderer(s)
@@ -274,8 +244,6 @@ func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	m.viewport.HighPerformanceRendering = false
 	return m, []tea.ProgramOption{tea.WithAltScreen()}
 }
-
-// Just a generic tea.Model to demo terminal information of ssh.
 
 func (m model) Init() tea.Cmd {
 
@@ -386,7 +354,7 @@ func updateEmailPage(m *model, msg tea.Msg) []tea.Cmd {
 			return append(cmds, tea.Quit)
 		case "ctrl+s":
 			fmt.Println("SENDING EMAIL")
-			m.createEmailBody()
+			m.sendEmail()
 			// fmt.Println(emailErr)
 
 		}
