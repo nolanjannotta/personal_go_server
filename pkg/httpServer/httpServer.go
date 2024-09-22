@@ -10,10 +10,9 @@ import (
 	"os"
 
 	"github.com/charmbracelet/log"
-	"github.com/joho/godotenv"
 )
 
-func Start(s *http.Server, done chan os.Signal) {
+func Start(s *http.Server, done chan<- os.Signal) {
 	log.Info("Starting HTTP server", "host", "localhost", "port", 8080)
 
 	if err := s.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
@@ -47,8 +46,6 @@ func SetUp() *http.Server {
 
 	return s
 
-	// fmt.Println("Server is running on port 8080")
-	// http.ListenAndServe(":8080", nil)
 }
 
 type Email struct {
@@ -79,8 +76,6 @@ func handleEmail(w http.ResponseWriter, r *http.Request) {
 	}
 	msg := []byte("Subject: ***SENT FROM WEBSITE***\r\n" + "\r\n" + "SENDER: " + email.From + "\r\n\n\n\n" + "NAME: " + email.Name + "\r\n\n\n\n" + "MESSAGE: " + email.Msg)
 
-	godotenv.Load(".env")
-
 	password := os.Getenv("EMAIL_PASSWORD")
 	fromAddress := os.Getenv("EMAIL_ADDRESS")
 	personalEmail := os.Getenv("PERSONAL_EMAIL")
@@ -93,7 +88,8 @@ func handleEmail(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 
 	}
 }

@@ -8,47 +8,73 @@ import (
 	"net/mail"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/nolanjannotta/personal_go_server/pkg/httpServer"
 )
+
+func (m *model) ResetEmailForm() {
+	m.msgInput.Blur()
+	m.nameInput.Blur()
+	m.fromInput.Blur()
+
+	m.msgInput.Reset()
+	m.nameInput.Reset()
+	m.fromInput.Reset()
+	m.textInputIndex = 0
+
+}
 
 func (m *model) updateInputs(msg tea.Msg) tea.Cmd {
 	cmds := make([]tea.Cmd, 3)
 
-	m.textInput[0], cmds[0] = m.textInput[0].Update(msg)
-	m.textInput[1], cmds[1] = m.textInput[1].Update(msg)
-	m.textArea, cmds[2] = m.textArea.Update(msg)
+	m.nameInput, cmds[0] = m.nameInput.Update(msg)
+	m.fromInput, cmds[1] = m.fromInput.Update(msg)
+	m.msgInput, cmds[2] = m.msgInput.Update(msg)
 
 	return tea.Batch(cmds...)
 }
 
-func (m *model) UpdateEmailPage(msg tea.Msg) []tea.Cmd {
+func (m *model) RenderEmailPage() {
+	m.content = m.emailLayout.Render(
+		fmt.Sprint(
+			"\n\nCONTACT FORM\n\n" +
+
+				lipgloss.JoinVertical(
+					lipgloss.Left,
+					"name: "+m.nameInput.View()+"\n",
+					"email: "+m.fromInput.View()+"\n",
+					"message: "+"\n",
+					m.msgInput.View(),
+					m.emailSuccessMsg),
+		))
+}
+
+func (m *model) UpdateEmailPage(msg tea.Msg) tea.Cmd {
 	var (
 		cmds []tea.Cmd
 	)
 
-	cmds = append(cmds, m.updateInputs(msg))
-
 	switch m.textInputIndex {
 	case 0:
-		if !m.textInput[0].Focused() {
-			cmds = append(cmds, m.textInput[0].Focus())
+		if !m.nameInput.Focused() {
+			cmds = append(cmds, m.nameInput.Focus())
 		}
+		m.fromInput.Blur()
+		m.msgInput.Blur()
 
-		m.textInput[1].Blur()
-		m.textArea.Blur()
 	case 1:
-		if !m.textInput[1].Focused() {
-			cmds = append(cmds, m.textInput[1].Focus())
+		if !m.fromInput.Focused() {
+			cmds = append(cmds, m.fromInput.Focus())
 		}
-		m.textInput[0].Blur()
-		m.textArea.Blur()
+		m.nameInput.Blur()
+		m.msgInput.Blur()
 
 	case 2:
-		if !m.textArea.Focused() {
-			cmds = append(cmds, m.textArea.Focus())
+		if !m.msgInput.Focused() {
+			cmds = append(cmds, m.msgInput.Focus())
 		}
-		m.textInput[0].Blur()
-		m.textInput[1].Blur()
+		m.fromInput.Blur()
+		m.nameInput.Blur()
 
 	}
 
@@ -56,13 +82,6 @@ func (m *model) UpdateEmailPage(msg tea.Msg) []tea.Cmd {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+b":
-			m.textArea.Blur()
-			m.textInput[0].Blur()
-			m.textInput[1].Blur()
-			m.textArea.Reset()
-			m.textInput[0].Reset()
-			m.textInput[1].Reset()
-			m.textInputIndex = 0
 
 			m.pageName = "index"
 			m.content = m.markdown["index"]
@@ -81,47 +100,41 @@ func (m *model) UpdateEmailPage(msg tea.Msg) []tea.Cmd {
 				m.textInputIndex = 0
 			}
 		case "ctrl+c":
-			return append(cmds, tea.Quit)
+			return tea.Quit
 		case "ctrl+s":
 			fmt.Println("SENDING EMAIL")
 			m.SendEmail()
-			// fmt.Println(emailErr)
 
 		}
 	}
 
-	m.content = fmt.Sprint(
-		"CONTACT FORM" + "\n\n" +
-			"email: " + m.textInput[0].View() + "\n\n" +
-			"name: " + m.textInput[1].View() + "\n\n" +
-			"message: " + "\n" +
-			m.textArea.View() + "\n\n" +
-			"'ctrl+s' to send email\n'ctrl+b' to go back\n'ctrl+c' to quit\n'tab' for next text box\n'shift+tab' for previous text box\n\n\n" +
-			m.emailSuccessMsg)
+	cmds = append(cmds, m.updateInputs(msg))
 
-	return cmds
+	m.RenderEmailPage()
+
+	return tea.Batch(cmds...)
 }
 
 func (m *model) SendEmail() {
 	var emailErr string = "A mysterious error occurred. Please try again or contact me through twitter or warpcast :)"
 
 	// validate that all fields are filled out
-	if m.textInput[0].Value() == "" || m.textInput[1].Value() == "" || m.textArea.Value() == "" {
+	if m.nameInput.Value() == "" || m.fromInput.Value() == "" || m.msgInput.Value() == "" {
 		m.emailSuccessMsg = "ERROR: please fill out all fields before sending an email"
 		return
 	}
 
 	// check if return email address is valid
-	_, err := mail.ParseAddress(m.textInput[0].Value())
+	_, err := mail.ParseAddress(m.fromInput.Value())
 	if err != nil {
 		m.emailSuccessMsg = "ERROR: invalid email address detected, please try again."
 		return
 	}
 
 	email := httpServer.Email{
-		From: m.textInput[0].Value(),
-		Name: m.textInput[1].Value(),
-		Msg:  m.textArea.Value(),
+		From: m.fromInput.Value(),
+		Name: m.nameInput.Value(),
+		Msg:  m.msgInput.Value(),
 	}
 
 	b, err := json.Marshal(email)
@@ -142,7 +155,6 @@ func (m *model) SendEmail() {
 	if err != nil {
 		m.emailSuccessMsg = emailErr
 		return
-		// panic(err)
 	}
 
 	defer res.Body.Close()
@@ -150,7 +162,6 @@ func (m *model) SendEmail() {
 	if res.StatusCode != 200 {
 		m.emailSuccessMsg = emailErr
 		return
-		// fmt.Println(res.Status)
 	}
 	m.emailSuccessMsg = "Email sent successfully! I'll get back to you as soon as I can. Thanks for reaching out!"
 

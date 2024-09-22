@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/textarea"
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
@@ -25,25 +26,29 @@ const (
 	port = "23234"
 )
 
-
-
 type model struct {
-	term            string
-	profile         string
-	width           int
-	height          int
-	pStyle          lipgloss.Style
-	borderStyle     lipgloss.Style
-	titleStyle      lipgloss.Style
-	footerStyle     lipgloss.Style
-	viewport        viewport.Model
-	textArea        textarea.Model
-	textInput       []textinput.Model
+	term        string
+	profile     string
+	width       int
+	height      int
+	renderer    *lipgloss.Renderer
+	footerStyle lipgloss.Style
+	// helpStyle   lipgloss.Style
+
+	emailLayout lipgloss.Style
+	viewport    viewport.Model
+
+	nameInput textinput.Model
+	fromInput textinput.Model
+	msgInput  textarea.Model
+
 	textInputIndex  int
 	content         string
 	pageName        string
 	emailSuccessMsg string
 	markdown        map[string]string
+	footer          help.Model
+	keys            KeyMap
 }
 
 func SetUp() *ssh.Server {
@@ -72,7 +77,7 @@ func SetUp() *ssh.Server {
 
 }
 
-func Start(s *ssh.Server, done chan os.Signal) {
+func Start(s *ssh.Server, done chan<- os.Signal) {
 	log.Info("Starting SSH server", "host", host, "port", port)
 
 	if err := s.ListenAndServe(); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
@@ -83,53 +88,45 @@ func Start(s *ssh.Server, done chan os.Signal) {
 }
 
 func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
-	// This should never fail, as we are using the activeterm middleware.
+
+	// fingerprint := uuid.New().String()
+
 	pty, _, _ := s.Pty()
 
 	renderer := bubbletea.MakeRenderer(s)
-	pStyle := renderer.NewStyle().
-		Foreground(lipgloss.Color("10"))
 
-	borderStyle := renderer.NewStyle().
-		BorderStyle(lipgloss.RoundedBorder()).
-		PaddingRight(4).
-		PaddingLeft(1).
-		Width(pty.Window.Width - 2).
-		Align(lipgloss.Left).
-		TabWidth(0)
+	emailLayout := renderer.NewStyle().Width(pty.Window.Width).Align(lipgloss.Center)
 
-	titleStyle := renderer.NewStyle().
-		Foreground(lipgloss.Color("10")).
-		Width(pty.Window.Width).
-		Bold(true)
-
-	footerStyle := renderer.NewStyle().Foreground(lipgloss.Color("8")).Align(lipgloss.Left)
+	footerStyle := renderer.NewStyle().Foreground(lipgloss.Color("#4f5258"))
 
 	m := model{
+		renderer:       renderer,
 		term:           pty.Term,
 		profile:        renderer.ColorProfile().Name(),
 		width:          pty.Window.Width,
 		height:         pty.Window.Height,
-		titleStyle:     titleStyle,
-		borderStyle:    borderStyle,
-		pStyle:         pStyle,
+		emailLayout:    emailLayout,
 		footerStyle:    footerStyle,
-		textArea:       textarea.New(),
-		textInput:      make([]textinput.Model, 2),
+		msgInput:       textarea.New(),
+		nameInput:      textinput.New(),
+		fromInput:      textinput.New(),
 		textInputIndex: 0,
 		pageName:       "index",
-		viewport:       viewport.New(pty.Window.Width, pty.Window.Height-3),
+		viewport:       viewport.New(pty.Window.Width, pty.Window.Height-2),
+		footer:         help.New(),
 	}
+
+	m.SetUpFooter()
+
 	m.LoadMarkdown()
-	m.textInput[0] = textinput.New()
-	m.textInput[1] = textinput.New()
 
-	m.textInput[0].Placeholder = "your email"
-	m.textInput[1].Placeholder = "your name"
+	m.nameInput.Placeholder = "your name"
+	m.fromInput.Placeholder = "your email"
 
-	m.textArea.Placeholder = "say hi!"
-	m.viewport.YPosition = 2
-	m.viewport.HighPerformanceRendering = false
+	m.msgInput.Placeholder = "say hi!"
+	m.msgInput.SetWidth(pty.Window.Width / 2)
+	m.msgInput.SetHeight(10)
+
 	return m, []tea.ProgramOption{tea.WithAltScreen()}
 }
 
@@ -139,6 +136,7 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+
 	var (
 		cmd  tea.Cmd
 		cmds []tea.Cmd
@@ -147,24 +145,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch m.pageName {
 
 	case "index", "snake", "calculator":
-		markdownCmds := m.UpdateMarkdownPages(msg)
-		cmds = append(cmds, markdownCmds...)
+		cmds = append(cmds, m.UpdateMarkdownPages(msg))
 	case "email":
-		// m.textInput[0].Focus()
-		emailCmds := m.UpdateEmailPage(msg)
-		cmds = append(cmds, emailCmds...)
+
+		cmds = append(cmds, m.UpdateEmailPage(msg))
 
 	}
 
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
+
 		m.height = msg.Height
 		m.width = msg.Width
-		m.viewport = viewport.New(msg.Width, msg.Height-3)
+		m.emailLayout = m.renderer.NewStyle().Width(m.width).Align(lipgloss.Center)
+		m.viewport = viewport.New(m.width, m.height-2)
 	}
 
-	m.viewport.SetContent(m.content)
 	m.viewport, cmd = m.viewport.Update(msg)
+	m.viewport.SetContent(m.content)
 	cmds = append(cmds, cmd)
 
 	return m, tea.Batch(cmds...)
@@ -173,8 +171,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) View() string {
 	return fmt.Sprint(
 		m.viewport.View(),
-		// m.content,
-
 		"\n\n",
-		m.footerStyle.Render(fmt.Sprintf("---------[arrow keys or mouse]🠢 scroll---------[q]🠢 quit---------progress🠢 %3.f%%---------", m.viewport.ScrollPercent()*100)))
+		m.RenderFooter(),
+	)
 }

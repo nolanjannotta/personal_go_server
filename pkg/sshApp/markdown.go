@@ -6,40 +6,38 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func (m *model) UpdateMarkdownPages(msg tea.Msg) []tea.Cmd {
-	var (
-		cmds []tea.Cmd
-	)
+func (m *model) UpdateMarkdownPages(msg tea.Msg) tea.Cmd {
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q", "ctrl+c":
-			return append(cmds, tea.Quit)
+			return tea.Quit
 		case "s":
 			m.pageName = "snake"
-			m.content = m.markdown["snake"]
+			m.content = m.markdown[m.pageName]
 			m.viewport.GotoTop()
 		case "c":
 			m.pageName = "calculator"
-			m.content = m.markdown["calculator"]
+			m.content = m.markdown[m.pageName]
 			m.viewport.GotoTop()
 		case "h":
 			m.pageName = "index"
-			m.content = m.markdown["index"]
+			m.content = m.markdown[m.pageName]
 			m.viewport.GotoTop()
-
 		case "e":
-			emailCmds := m.UpdateEmailPage(msg)
-			m.viewport.GotoTop()
-			cmds = append(cmds, emailCmds...)
 			m.pageName = "email"
+			m.RenderEmailPage()
+			m.viewport.GotoTop()
+			return m.nameInput.Focus()
+		case "ctrl+h":
+			m.UpdateHelpPage()
 
 		}
 
 	}
 
-	return cmds
+	return nil
 
 }
 

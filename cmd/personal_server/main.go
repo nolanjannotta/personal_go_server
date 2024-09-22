@@ -10,12 +10,14 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/charmbracelet/ssh"
+	"github.com/joho/godotenv"
 
 	"github.com/nolanjannotta/personal_go_server/pkg/httpServer"
 	"github.com/nolanjannotta/personal_go_server/pkg/sshApp"
 )
 
 func main() {
+	godotenv.Load("../../.env")
 
 	http_server := httpServer.SetUp()
 	ssh_app := sshApp.SetUp()
