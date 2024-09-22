@@ -11,6 +11,9 @@ Hello there! I'm Nolan, I like to make things both digital and physical. I'm a s
 
 Some of my interests include blockchain, coding, terminal apps, generative art, AI, minimal design, jazz, metal working etc.
 
+life goal: Build cool things that people enjoy.
+
+
 This site is a work in progress and acts as a resume/portfolio. Below you will find links and info to learn more about my previous and future projects.
 
 

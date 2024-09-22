@@ -23,7 +23,6 @@ func Start(s *http.Server, done chan<- os.Signal) {
 }
 
 func SetUp() *http.Server {
-	// var server http.Server
 
 	mux := http.NewServeMux()
 
