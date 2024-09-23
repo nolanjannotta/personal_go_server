@@ -1,9 +1,11 @@
 package httpServer
 
 import (
+	"embed"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"net/mail"
 	"net/smtp"
@@ -22,16 +24,26 @@ func Start(s *http.Server, done chan<- os.Signal) {
 
 }
 
+//go:embed static
+var static embed.FS
+
 func SetUp() *http.Server {
 
 	mux := http.NewServeMux()
 
-	fs := http.FileServer(http.Dir("../../web/static"))
+	var staticFS, err = fs.Sub(static, "static")
+
+	if err != nil {
+		panic(err)
+	}
+
+	fs := http.FileServer(http.FS(staticFS))
+
 	mux.Handle("/", fs)
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("healthy")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		w.Write([]byte("HEALTHY"))
 	})
 	mux.HandleFunc("POST /email", handleEmail)
 

@@ -48,7 +48,6 @@ type model struct {
 	emailSuccessMsg string
 	markdown        map[string]string
 	footer          help.Model
-	keys            KeyMap
 }
 
 func SetUp() *ssh.Server {
@@ -115,8 +114,6 @@ func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 		viewport:       viewport.New(pty.Window.Width, pty.Window.Height-2),
 		footer:         help.New(),
 	}
-
-	m.SetUpFooter()
 
 	m.LoadMarkdown()
 

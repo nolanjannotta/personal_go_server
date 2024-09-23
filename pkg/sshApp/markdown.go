@@ -1,10 +1,13 @@
 package sshApp
 
 import (
-	"os"
+	"embed"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
+
+//go:embed markdown/*
+var markdown embed.FS
 
 func (m *model) UpdateMarkdownPages(msg tea.Msg) tea.Cmd {
 
@@ -45,9 +48,14 @@ func (m *model) LoadMarkdown() error {
 	var pageLoadErr string = "A mysterious error occurred while loading this page. Please let me know through twitter or warpcast :)"
 
 	m.markdown = make(map[string]string)
-	index, err1 := os.ReadFile("../../web/markdown/index.md")
-	snake, err2 := os.ReadFile("../../web/markdown/snake.md")
-	calculator, err3 := os.ReadFile("../../web/markdown/calculator.md")
+
+	// index, err1 := os.ReadFile("../../web/markdown/index.md")
+	// snake, err2 := os.ReadFile("../../web/markdown/snake.md")
+	// calculator, err3 := os.ReadFile("../../web/markdown/calculator.md")
+
+	index, err1 := markdown.ReadFile("markdown/index.md")
+	snake, err2 := markdown.ReadFile("markdown/snake.md")
+	calculator, err3 := markdown.ReadFile("markdown/calculator.md")
 
 	m.markdown["index"] = string(index)
 	m.markdown["snake"] = string(snake)
