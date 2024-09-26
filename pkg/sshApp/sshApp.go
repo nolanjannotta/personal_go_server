@@ -120,6 +120,15 @@ func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	m.nameInput.Placeholder = "your name"
 	m.fromInput.Placeholder = "your email"
 
+	m.nameInput.PlaceholderStyle = m.renderer.NewStyle().Foreground(lipgloss.Color("240"))
+	m.fromInput.PlaceholderStyle = m.renderer.NewStyle().Foreground(lipgloss.Color("240"))
+	m.nameInput.Cursor.Style = m.renderer.NewStyle().Background(lipgloss.AdaptiveColor{Light: "255", Dark: "0"})
+	m.fromInput.Cursor.Style = m.renderer.NewStyle().Background(lipgloss.AdaptiveColor{Light: "255", Dark: "0"})
+
+	m.msgInput.FocusedStyle.Placeholder = m.renderer.NewStyle().Foreground(lipgloss.Color("240"))
+	m.msgInput.BlurredStyle.Placeholder = m.renderer.NewStyle().Foreground(lipgloss.Color("240"))
+	m.msgInput.Cursor.Style = m.renderer.NewStyle().Background(lipgloss.AdaptiveColor{Light: "255", Dark: "0"})
+
 	m.msgInput.Placeholder = "say hi!"
 	m.msgInput.SetWidth(pty.Window.Width / 2)
 	m.msgInput.SetHeight(10)

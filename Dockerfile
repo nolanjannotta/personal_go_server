@@ -18,6 +18,7 @@ FROM gcr.io/distroless/base-debian12
 
 WORKDIR /app
 COPY --from=builder /build/cmd/personal_server/personal_go_server ./personal_go_server
+COPY --from=builder /build/.env ./.env  
 
 
 # COPY --from=builder /build/web/markdown ./web/markdown
