@@ -17,7 +17,9 @@ import (
 )
 
 func main() {
-	godotenv.Load("../../.env")
+	// godotenv.Load("../../.env")
+
+	godotenv.Load("./.env") // dockerfile
 
 	http_server := httpServer.SetUp()
 	ssh_app := sshApp.SetUp()
