@@ -33,14 +33,10 @@ console.image = (url) => {
       "px " +
       this.height * scaler +
       "px; color: transparent;";
-      console.clear()
+    console.clear();
     console.log("%c+", style);
-
     console.log("%chello there", "font-size:65px;");
   };
 };
 
-
-
 console.image(url);
-

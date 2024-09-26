@@ -7,7 +7,7 @@
 
 body {
     margin:auto;
-    max-width:80%;
+    max-width:50%;
     font-family: 'IBM Plex Mono', monospace;
     /* box-sizing: border-box; */
     padding: 2%;
@@ -133,6 +133,17 @@ section {
     body {
         font-size: small;
         padding: 20px 25px;
+        max-width: 100%;
+
+    }
+
+}
+@media (max-width: 850px) {
+    body {
+        font-size: small;
+        padding: 20px 25px;
+        max-width: 80%;
+
     }
 
 }
