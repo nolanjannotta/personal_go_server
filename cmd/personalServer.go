@@ -1,4 +1,4 @@
-package main
+package personalServer
 
 import (
 	"context"
@@ -16,13 +16,29 @@ import (
 	"github.com/nolanjannotta/personal_go_server/pkg/sshApp"
 )
 
-func main() {
+func Launch() {
 	// godotenv.Load("../../.env")
 
 	godotenv.Load("./.env") // dockerfile
 
+	// l, err := net.Listen("tcp", ":42069")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// m := cmux.New(l)
+
 	http_server := httpServer.SetUp()
 	ssh_app := sshApp.SetUp()
+
+	// httpL := m.Match(cmux.HTTP1Fast())
+	// trpcL := m.Match(cmux.Any())
+
+	// go http_server.Serve(httpL)
+	// go ssh_app.Serve(trpcL)
+
+	// log.Info("Starting servers")
+	// m.Serve()
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)

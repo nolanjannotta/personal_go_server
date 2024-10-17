@@ -9,10 +9,14 @@ body {
     margin:auto;
     max-width:50%;
     font-family: 'IBM Plex Mono', monospace;
+    font-size: 17px;
+    color: #2c3328;
     /* box-sizing: border-box; */
     padding: 2%;
     transform: skewY(1.75deg);
     line-height: 1.6;
+
+    background-color:  #FFFAED;
 
 }
 
@@ -85,6 +89,12 @@ a {
 
     text-decoration: none;
     display: inline-block;
+    color: #2589bd
+}
+
+a:visited {
+    color: #084c7c;
+
 }
 
 

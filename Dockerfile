@@ -10,14 +10,13 @@ COPY . .
 
 
 RUN go mod download
-RUN GOOS=linux go build -o ./cmd/personal_server/personal_go_server ./cmd/personal_server
-
+RUN GOOS=linux go build -o . .
 
 FROM gcr.io/distroless/base-debian12
 
 
 WORKDIR /app
-COPY --from=builder /build/cmd/personal_server/personal_go_server ./personal_go_server
+COPY --from=builder /build/personal_go_server .
 COPY --from=builder /build/.env ./.env  
 
 
@@ -26,8 +25,8 @@ COPY --from=builder /build/.env ./.env
 
 
 
-EXPOSE 8080
-EXPOSE 23234
+EXPOSE 42069
+# EXPOSE 23234
 
 
 

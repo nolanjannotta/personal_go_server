@@ -18,7 +18,7 @@ This site is a work in progress and acts as a resume/portfolio. Below you will f
 
 
 
-Are you tired of awesome terminal UIs? Great news, this page is also available on your favorite web browser! Simply type " url here" into your search bar and hit enter.
+<!-- Are you tired of awesome terminal UIs? Great news, this page is also available on your favorite web browser! Simply type " url here" into your search bar and hit enter. -->
 
 
 Thanks for checking it out!
