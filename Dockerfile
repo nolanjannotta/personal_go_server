@@ -25,8 +25,8 @@ COPY --from=builder /build/.env ./.env
 
 
 
-EXPOSE 42069
-# EXPOSE 23234
+EXPOSE 8080
+EXPOSE 23234
 
 
 
