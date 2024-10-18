@@ -19,6 +19,12 @@ import (
 func Launch() {
 	// godotenv.Load("../../.env")
 
+	// func Sessions() (*session.Session, error){
+	// 	sess, err := session.NewSession()
+	// 	svc := session.Must(sess, err)
+	// 	return svc, err
+	//  }
+
 	godotenv.Load("./.env") // dockerfile
 
 	// l, err := net.Listen("tcp", ":42069")

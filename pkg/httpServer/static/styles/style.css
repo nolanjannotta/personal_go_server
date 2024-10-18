@@ -31,6 +31,14 @@ li {
 }
 
 
+.inner-section {
+    padding: 0 10px 0 10px;
+}
+
+
+hr {
+    border-top: 2px dotted #2c3328;
+}
 
 
 .background {

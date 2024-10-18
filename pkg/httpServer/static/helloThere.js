@@ -36,13 +36,13 @@ console.image = (url) => {
       "px; color: transparent;";
     console.clear();
     console.log("%c+", style);
-    // console.log("%chello there", "font-size:65px;");
+    console.log("%chello there", "font-size:50px;");
   };
 };
 
 
 // to wait for warnings and things to be written to console first so we can clear all of them
-setTimeout(()=>{console.image(chrisHansen)}, 1000)
+setTimeout(()=>{console.image(helloThere)}, 1000)
 
 
 

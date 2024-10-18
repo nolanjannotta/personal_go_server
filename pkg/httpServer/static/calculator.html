@@ -23,18 +23,19 @@
     <main>
         <section class="about">
             <h1>&#8858; Calculator</h1>
+            <div class="inner-section">
                 <ul class="list">
                     <li id="deployedAt"> &nbsp;deployed: <a href="https://etherscan.io/tx/0x6e7df2403c18ddd08f0ec4a6f1cdab2ecc41b4218d3824f5bb80a4d09bc80a46" target="_blank">Mar-30-2022</a> <small class="vintage-score" id="vintageScore"></small>  </li>
                     <!-- <li>&nbsp;mainnet</li> -->
                     <li>&nbsp;<a href="https://etherscan.io/address/0xc3b88a12d8cda6b9802c30be4bb18bdd1828b317" target="_blank">etherscan &#8599;</a></li>
                     <li>&nbsp;<a href="https://opensea.io/collection/calculator-v4" target="_blank">opensea &#8599;</a></li>
                 </ul> 
-                
+                </div>
             <span class="corners">
                 <span>&#8988;</span>
                 <span>&#8989;</span>
               </span>
-            
+              <div class="inner-section">
             <p>The first finished project that I ever deployed on mainnet. A fully functioning, fully onchain calculator. comes in 5 colors schemes. 
                 "Onchain" in this case means that the SVG code 
                 and javascript code are stored in the smart contract. Once the SVG is returned from the contract, 
@@ -43,7 +44,7 @@
             <p><b>note: </b>This contract does not include animation_url in the metadata, this means the calculator does not work on opensea. Minting through this site will randomly choose colors for you. The original (likely broken) frontend lives <a>here &#8599;</a>. Fixing it is on the todo list.</p>
 
             <!-- <p><b> &#10036;note:&#10036;</b></p> -->
-            
+            </div>
             <span class="corners">
                 <span>&#8990;</span>
                 <span>&#8991;</span>
@@ -52,14 +53,16 @@
         </section>
 
         <section id="demo">
+            <div class="inner-section">
             <span style="font-size: x-large;">&dopf; &eopf; &mopf; &oopf; &#8595;</span>
             <br/>
             <object width="375" id="image"></object>
             <p id="supply">loading...</p>
+        </div>
         </section>
         
         <section id="controls">
-
+            <div class="inner-section">
             <div id="whenDisconnected">
                 <span id="connectButtons">
                     <button id="metamask">metamask</button> |
@@ -95,7 +98,7 @@
                 </span>
                 <small><p id="mintMessage"></p></small>
             </div>
-
+</div>
         </section>
         <p style="font-size: x-small;">¹ 'vintage rating' is a made up metric. Found by the following equation: (CryptoPunks age / Calculator age) * 10 </p>
     </main>

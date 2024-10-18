@@ -23,18 +23,19 @@
     <main>
         <section class="about">
             <h1>&#8858; Snake</h1>
+            <div class="inner-section">
                 <ul class="list">
                     <li id="deployedAt">&nbsp;deployed: <a href="https://etherscan.io/tx/0x12e0cd7ae8cccd34ab201dfce8dde6092f478932c3383885594ad30ab6f68fbb" target="_blank">May-05-2022</a> <small id="vintageScore"></small></li>
                     <!-- <li>&nbsp;mainnet</li> -->
                     <li>&nbsp;<a href="https://etherscan.io/address/0x8c822FA282722eDcA512A9E94C591d3F52196eF2" target="_blank">etherscan &#8599;</a></li>
                     <li>&nbsp;<a href="https://opensea.io/collection/sssnake" target="_blank">opensea &#8599;</a></li>
                 </ul>
-                
+                </div>
             <span class="corners">
                 <span>&#8988;</span>
                 <span>&#8989;</span>
               </span>
-            
+              <div class="inner-section">
             <p>A game of snake on Ethereum mainnet. Fully functioning SVG stored onchain. comes in 5 colors schemes. 
                 "Onchain" in this case means that the SVG code 
                 and javascript code are stored in the smart contract. Once the SVG is returned from the contract, 
@@ -43,7 +44,7 @@
             <p>minting through this site will randomly choose colors for you. The original (likely broken) frontend lives <a>here &#8599;</a>. Fixing it is on the todo list.</p>
 
             <p>&#10036;<b> known bug:</b> food <b><i><u>can</u></i></b> spawn underneath the snake. &#10036;</p>
-            
+            </div>
             <span class="corners">
                 <span>&#8990;</span>
                 <span>&#8991;</span>
@@ -52,21 +53,23 @@
         </section>
 
         <section id="demo">
+            <div class="inner-section">
             <span style="font-size: x-large;">&dopf; &eopf; &mopf; &oopf; &#8595;</span>
             <br/>
             <object width="375" id="image"></object>
             <p id="supply">loading...</p>
+        </div>
         </section>
         
         <section id="controls">
-
+            <div class="inner-section">
             <div id="whenDisconnected">
                 <span id="connectButtons">
                     <button id="metamask">metamask</button> |
                     <button id="coinbaseWallet">coinbase wallet</button>
                 </span>
             </div>
-                
+                </div>
                 
 
             <div style="display:none" id="whenConnected">
