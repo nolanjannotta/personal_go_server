@@ -16,13 +16,14 @@ body {
     transform: skewY(1.75deg);
     line-height: 1.6;
 
-    background-color:  #FFFAED;
+    background-color:  #fffaf5;
 
 }
 
 
 li {
     margin-bottom: 10px;
+    
 }
 
 .project_name {
@@ -46,6 +47,8 @@ section h1 {
 
 .list {
     list-style: '\2AF8';
+    list-style-position: inside;
+    padding: 0;
 }
 .sub-list {
     list-style-type: '\29C8';

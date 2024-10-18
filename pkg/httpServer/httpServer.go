@@ -46,6 +46,7 @@ func SetUp() *http.Server {
 		w.Write([]byte("HEALTHY"))
 	})
 	mux.HandleFunc("POST /email", handleEmail)
+	// mux.HandleFunc("GET /{page}", subPageHandler)
 
 	s := &http.Server{
 		Addr:    ":8080",
@@ -58,6 +59,15 @@ func SetUp() *http.Server {
 	return s
 
 }
+
+// func homePageHandler(w http.ResponseWriter, r *http.Request) {
+
+// }
+
+// func subPageHandler(w http.ResponseWriter, r *http.Request) {
+// 	page := r.PathValue("page")
+
+// }
 
 type Email struct {
 	From string `json:"from"`
