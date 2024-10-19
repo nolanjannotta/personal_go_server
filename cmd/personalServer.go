@@ -3,10 +3,13 @@ package personalServer
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/aws/aws-sdk-go/aws/session"
 
 	"github.com/charmbracelet/log"
 	"github.com/charmbracelet/ssh"
@@ -19,11 +22,8 @@ import (
 func Launch() {
 	// godotenv.Load("../../.env")
 
-	// func Sessions() (*session.Session, error){
-	// 	sess, err := session.NewSession()
-	// 	svc := session.Must(sess, err)
-	// 	return svc, err
-	//  }
+	sess := session.Must(session.NewSession())
+	fmt.Println(sess)
 
 	godotenv.Load("./.env") // dockerfile
 
