@@ -1,7 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600;700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600;700&family=Monsieur+La+Doulaise&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600;700&family=Monsieur+La+Doulaise&family=Montagu+Slab:opsz,wght@16..144,100..700&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
+
 @font-face {
     font-family: "IBM Plex Mono";
     src: url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');;
   }
+
+/* 
+  @font-face {
+    font-family: "Playfair Display SC";
+    src: url('https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');;
+  } */
 
 
 
@@ -26,6 +36,15 @@ li {
     
 }
 
+.links{
+    list-style: '\25B8';
+    list-style-position: inside;
+    padding: 0;
+    
+    /* justify-content: left; */
+
+}
+
 .project_name {
     text-decoration: underline;
 }
@@ -47,6 +66,8 @@ hr {
 
 section h1 {
     font-style: italic;
+    font-family: "Montagu Slab", serif;
+    
 }
 
 
@@ -54,19 +75,29 @@ section h1 {
 
 
 .list {
-    list-style: '\2AF8';
+    list-style: '\22B3';
     list-style-position: inside;
     padding: 0;
+
+    
+  /* font-weight: 900;
+  font-style: normal; */
+  
 }
 .sub-list {
     list-style-type: '\29C8';
 }
 
 
+
 .title {
-    width: max-content;
+    /* font-family:'Times New Roman', serif; */
+    font-family: "Cormorant SC", serif;
+    /* width: max-content; */
     /* text-decoration: underline; */
-    text-decoration-thickness: .5px;
+    
+    letter-spacing: 4px;
+    /* text-decoration-thickness: 5px; */
     animation-direction: initial;
     cursor: grab;
 
