@@ -40,9 +40,11 @@ jobs:
         working-directory: /home/ubuntu
         # Bash commands you want to execute
         command: |
-          sudo docker pull ghcr.io/nolanjannotta/personal-server:latest
+          
           sudo docker stop $(sudo docker container ls -q --filter ancestor=ghcr.io/nolanjannotta/personal-server)
           sudo docker rmi ghcr.io/nolanjannotta/personal-server:latest -f
+
+          sudo docker pull ghcr.io/nolanjannotta/personal-server:latest
           sudo docker run -p 8080:8080 -p 23234:23234 -d ghcr.io/nolanjannotta/personal-server
         # Comment for Send-Command
         comment: hello this is a comment
