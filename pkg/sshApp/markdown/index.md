@@ -1,5 +1,5 @@
 
-𝕟𝕠𝕝𝕒𝕟 𝕛𝕒𝕟𝕟𝕠𝕥𝕥𝕒
+NOLAN JANNOTTA 
 
 ⮚ current whereabouts: los angeles 
 ⮚ github: https://github.com/nolanjannotta
@@ -18,7 +18,7 @@ This site is a work in progress and acts as a resume/portfolio. Below you will f
 
 
 
-<!-- Are you tired of awesome terminal UIs? Great news, this page is also available on your favorite web browser! Simply type " url here" into your search bar and hit enter. -->
+Are you tired of awesome terminal UIs? Great news, this page is also available on your favorite web browser! Simply type ********.*** [TODO] into your search bar and hit enter.
 
 
 Thanks for checking it out!
@@ -29,24 +29,24 @@ Thanks for checking it out!
 
 ⊚ DIGITAL
 
-⮚ calculator (press 'c')  ➟ Functioning calculator stored on Ethereum mainnet.
-⮚ snake (press 's')  ➟ Playable game of Snake on Ethereum mainnet.
-⮚ keyboard ⌕   ➟ Playable and recordable musical keyboard on Arbitrum L2. 
-⮚ recursive trees: https://recursivetrees.xyz ➟ Ultra dynamic "growing" trees on Ethereum mainnet. All proceeds donated to One Tree Planted.
-⮚ onchain experiments: https://onchainexperiments.xyz ➟ A prototype platform for artists and creators to mint and share their own onchain art on Base L2. 
+⊳ calculator (press 'c')  ➟ Functioning calculator stored on Ethereum mainnet.
+⊳ snake (press 's')  ➟ Playable game of Snake on Ethereum mainnet.
+⊳ keyboard ⌕   ➟ Playable and recordable musical keyboard on Arbitrum L2. 
+⊳ recursive trees: https://recursivetrees.xyz ➟ Ultra dynamic "growing" trees on Ethereum mainnet. All proceeds donated to One Tree Planted.
+⊳ onchain experiments: https://onchainexperiments.xyz ➟ A prototype platform for artists and creators to mint and share their own onchain art on Base L2. 
 
 
 ⊚ PHYSICAL
 
-⮚ nolan mfg. co. ↗ ➟ handmade physical goods, otw.
-⮚ something else...
+⊳ nolan mfg. co. ↗ ➟ handmade physical goods, otw.
+⊳ something else...
 
 
 ⊚ CONTACT
 
-⮚ twitter: https://twitter.com/jannotta_nolan
-⮚ warpcast: https://warpcast.com/nolanj
-⮚ email (press 'e')
+⊳ twitter: https://twitter.com/jannotta_nolan
+⊳ warpcast: https://warpcast.com/nolanj
+⊳ email (press 'e')
 
 
 

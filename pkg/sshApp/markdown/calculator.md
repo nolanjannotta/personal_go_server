@@ -4,9 +4,9 @@
 ⇐ home (press 'h')
 
 
-⮚ deployed: Mar-30-2022
-⮚ etherscan: https://etherscan.io/address/0xc3b88a12d8cda6b9802c30be4bb18bdd1828b317
-⮚ opensea: https://opensea.io/collection/calculator-v4
+⊳ deployed: Mar-30-2022
+⊳ etherscan: https://etherscan.io/address/0xc3b88a12d8cda6b9802c30be4bb18bdd1828b317
+⊳ opensea: https://opensea.io/collection/calculator-v4
 
 
 

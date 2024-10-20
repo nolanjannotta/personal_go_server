@@ -4,9 +4,9 @@
 ⇐ home(press 'h')
 
 
-⮚ deployed: May-05-2022
-⮚ etherscan: https://etherscan.io/address/0x8c822FA282722eDcA512A9E94C591d3F52196eF2
-⮚ opensea: https://opensea.io/collection/sssnake
+⊳ deployed: May-05-2022
+⊳ etherscan: https://etherscan.io/address/0x8c822FA282722eDcA512A9E94C591d3F52196eF2
+⊳ opensea: https://opensea.io/collection/sssnake
 
 
 

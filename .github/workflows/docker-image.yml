@@ -18,8 +18,30 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{github.actor}}
-        password: ${{secrets.GHCR_TOKEn}}
+        password: ${{secrets.GHCR_TOKEN}}
     - name: 'Build Inventory Image'
       run: |
         docker build . --file Dockerfile --tag ghcr.io/${{github.actor}}/personal-server:latest
-        docker push ghcr.io/${{github.actor}}/personal-server:latest
+        docker push ghcr.io/${{github.actor}}/personal-server:latest  
+
+
+    - name: "Deploy to EC2 Instance"
+      uses: peterkimzz/aws-ssm-send-command@v1.1.1
+      with:
+        # AWS access key id
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        # AWS secret access key
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        # Where EC2 instance is
+        aws-region: ${{ secrets.AWS_REGION }}
+        # AWS EC2 Instance id or ids
+        instance-ids: ${{ secrets.AWS_INSTANCE_ID }}
+        # Command execution location
+        # !!! The line below may vary depending on where your docker-compose file is located.
+        working-directory: /home/ubuntu
+        # Bash commands you want to execute
+        command: |
+          sudo docker pull ghcr.io/nolanjannotta/personal-server:latest
+          sudo docker run -p 8080:8080 -p 23234:23234 -d ghcr.io/nolanjannotta/personal-server
+        # Comment for Send-Command
+        comment: hello this is a comment
