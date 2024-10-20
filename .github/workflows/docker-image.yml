@@ -20,5 +20,5 @@ jobs:
         username: ${{github.actor}}
         password: ${{secrets.GHCR_TOKEN}}
       run: |
-        docker build . --tag ghcr.io/<your-GitHub-username>/store:latest
-        docker push ghcr.io/<your-GitHub-username>/store:latest
+        docker build . --file Dockerfile --tag ghcr.io/${{github.actor}}/store:latest
+        docker push ghcr.io/${{github.actor}}/store:latest
