@@ -9,7 +9,7 @@ body {
     font-size: 17px;
     color: #2c3328;
     padding: 2%;
-    transform: skewX(2deg) skewY(2deg);
+    transform: skewY(2.5deg);
     line-height: 1.6;
     background-color:  rgb(250, 250, 250);
 
