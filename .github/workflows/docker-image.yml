@@ -25,6 +25,9 @@ jobs:
         docker push ghcr.io/${{github.actor}}/personal-server:latest  
 
   deploy:
+    runs-on: ubuntu-latest
+
+    steps:
     - name: "Deploy to EC2 Instance"
       uses: peterkimzz/aws-ssm-send-command@v1.1.1
       with:
