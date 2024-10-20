@@ -23,7 +23,7 @@ jobs:
       run: |
         docker build . --file Dockerfile --tag ghcr.io/${{github.actor}}/personal-server:latest
         docker push ghcr.io/${{github.actor}}/personal-server:latest  
-        
+
     - name: "Deploy to EC2 Instance"
       uses: peterkimzz/aws-ssm-send-command@v1.1.1
       with:
@@ -41,6 +41,7 @@ jobs:
         # Bash commands you want to execute
         command: |
           sudo docker pull ghcr.io/nolanjannotta/personal-server:latest
+          sudo docker stop $(sudo docker container ls -q --filter ancestor=ghcr.io/nolanjannotta/personal-server)
           sudo docker run -p 8080:8080 -p 23234:23234 -d ghcr.io/nolanjannotta/personal-server
         # Comment for Send-Command
         comment: hello this is a comment
