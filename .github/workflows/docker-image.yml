@@ -24,7 +24,7 @@ jobs:
         docker build . --file Dockerfile --tag ghcr.io/${{github.actor}}/personal-server:latest
         docker push ghcr.io/${{github.actor}}/personal-server:latest  
 
-
+  deploy:
     - name: "Deploy to EC2 Instance"
       uses: peterkimzz/aws-ssm-send-command@v1.1.1
       with:
