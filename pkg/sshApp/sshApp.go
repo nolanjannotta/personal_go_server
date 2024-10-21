@@ -133,7 +133,7 @@ func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	m.msgInput.SetWidth(pty.Window.Width / 2)
 	m.msgInput.SetHeight(10)
 
-	return m, []tea.ProgramOption{tea.WithAltScreen()}
+	return m, []tea.ProgramOption{tea.WithAltScreen(), tea.WithMouseAllMotion()}
 }
 
 func (m model) Init() tea.Cmd {
