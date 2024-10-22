@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io/fs"
 	"math"
-	"net"
 	"net/http"
 	"net/mail"
 	"net/smtp"
@@ -49,7 +48,7 @@ func SetUp() *http.Server {
 		w.Write([]byte("HEALTHY"))
 	})
 	mux.HandleFunc("POST /email", handleEmail)
-	mux.HandleFunc("GET /ipdistance/{address}", handleIpAddressDistance)
+	mux.HandleFunc("GET /ipdistance", handleIpAddressDistance)
 	// mux.HandleFunc("GET /{page}", subPageHandler)
 
 	s := &http.Server{
@@ -126,30 +125,36 @@ type Location struct {
 type Response struct {
 	Miles string `json:"miles"`
 }
+type ClientIP struct {
+	IP string `json:"ip"`
+}
+
+func checkAndReturnServerError(w http.ResponseWriter, err error) {
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}
 
 func handleIpAddressDistance(w http.ResponseWriter, r *http.Request) {
-	// ipAddress := r.PathValue("address")
-	url := "http://ip-api.com/json/"
-	// fmt.Println(r.RemoteAddr)
-	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
-	userIP := net.ParseIP(ip)
-	// fmt.Println(userIP)
+	IPDistanceURL := "http://ip-api.com/json/"
+	laLat, laLon := 34.052235, -118.243683 // latitude and longitude of Los Angeles
 
-	laLat, laLon := 34.052235, -118.243683
+	// get clients public IPv4 address
+	var clientIP ClientIP
+	cIP, err := http.Get("https://api.ipify.org?format=json")
+	checkAndReturnServerError(w, err)
+	err = json.NewDecoder(cIP.Body).Decode(&clientIP)
+	checkAndReturnServerError(w, err)
 
-	locationResp, err := http.Get(fmt.Sprint(url, userIP))
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	// latitude and longitude of clients IP address
+	locationResp, err := http.Get(fmt.Sprint(IPDistanceURL, clientIP.IP))
+	checkAndReturnServerError(w, err)
 	var location Location
-	// var response response
 	err = json.NewDecoder(locationResp.Body).Decode(&location)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	checkAndReturnServerError(w, err)
 
+	// calculate distance between lats and lons
 	distance := getDistance(laLat, laLon, location.Lat, location.Lon)
 
 	response := Response{Miles: strconv.Itoa(int(distance * 0.621371))}

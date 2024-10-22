@@ -194,7 +194,7 @@
   geoLocation = window.location.origin
   // const url = window.GeolocationCoordinates()
   
-  fetch(window.location.origin + "/ipdistance/" + "13.56.5.32").then(response => {
+  fetch(window.location.origin + "/ipdistance").then(response => {
     if (response.ok) {      
       response.json().then((json)=>{
         console.log(json)
