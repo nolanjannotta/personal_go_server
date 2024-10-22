@@ -6,10 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"math"
+	"net"
 	"net/http"
 	"net/mail"
 	"net/smtp"
 	"os"
+	"strconv"
 
 	"github.com/charmbracelet/log"
 )
@@ -46,6 +49,7 @@ func SetUp() *http.Server {
 		w.Write([]byte("HEALTHY"))
 	})
 	mux.HandleFunc("POST /email", handleEmail)
+	mux.HandleFunc("GET /ipdistance/{address}", handleIpAddressDistance)
 	// mux.HandleFunc("GET /{page}", subPageHandler)
 
 	s := &http.Server{
@@ -113,4 +117,57 @@ func handleEmail(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
+}
+
+type Location struct {
+	Lat float64 `json:"lat"`
+	Lon float64 `json:"lon"`
+}
+type Response struct {
+	Miles string `json:"miles"`
+}
+
+func handleIpAddressDistance(w http.ResponseWriter, r *http.Request) {
+	ipAddress := r.PathValue("address")
+	url := "http://ip-api.com/json/"
+	// fmt.Println(r.RemoteAddr)
+	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	userIP := net.ParseIP(ip)
+	fmt.Println(userIP)
+
+	laLat, laLon := 34.052235, -118.243683
+
+	locationResp, err := http.Get(fmt.Sprint(url, ipAddress))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	var location Location
+	// var response response
+	err = json.NewDecoder(locationResp.Body).Decode(&location)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	distance := getDistance(laLat, laLon, location.Lat, location.Lon)
+
+	response := Response{Miles: strconv.Itoa(int(distance * 0.621371))}
+
+	w.Header().Set("content-type", "application/json")
+	json.NewEncoder(w).Encode(response)
+
+}
+
+func getDistance(lat1, lon1, lat2, lon2 float64) float64 {
+	// Convert degrees to radians
+	lat1 = lat1 * math.Pi / 180
+	lon1 = lon1 * math.Pi / 180
+	lat2 = lat2 * math.Pi / 180
+	lon2 = lon2 * math.Pi / 180
+
+	// Haversine formula to calculate the great-circle distance
+	distance := math.Acos(math.Sin(lat1)*math.Sin(lat2)+math.Cos(lat1)*math.Cos(lat2)*math.Cos(lon2-lon1)) * 6371
+
+	return distance
 }

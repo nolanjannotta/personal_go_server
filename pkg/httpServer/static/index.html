@@ -25,10 +25,11 @@
 
       <div class="inner-section">
         <ul class="links">
-          <li>
+          <li >
             <a target="_blank"
               href="https://www.google.com/maps/place/Los+Angeles,+CA/@34.0200392,-118.741382,10z/data=!3m1!4b1!4m6!3m5!1s0x80c2c75ddc27da13:0xe22fdf6f254608f4!8m2!3d34.0549076!4d-118.242643!16s%2Fm%2F030qb3t?entry=ttu">
               los angeles &#8599;</a>
+              <span id="distance" style="font-size:12px"></span>
           </li>
           <li>
             <a target="_blank" href="https://github.com/nolanjannotta">github &#8599;</a>
@@ -187,6 +188,26 @@
   </footer>
 </body>
 <script src="./helloThere.js" type="text/javascript"></script>
+<script type="text/javascript" type="module">
+
+  const element = document.getElementById("distance")
+  geoLocation = window.location.origin
+  // const url = window.GeolocationCoordinates()
+  
+  fetch(window.location.origin + "/ipdistance/" + "13.56.5.32").then(response => {
+    if (response.ok) {      
+      response.json().then((json)=>{
+        console.log(json)
+        element.textContent = json.miles + " miles away"
+      })
+    }
+    
+  })
+  
+
+
+
+</script>
 <!-- <script src="./skew.js" type="text/javascript"></script> -->
 
 </html>
