@@ -152,17 +152,6 @@ section {
     }
 
 }
-
-
-@media (max-width: 439px) {
-    body {
-        font-size: small;
-        padding: 20px 25px;
-        max-width: 100%;
-
-    }
-
-}
 @media (max-width: 850px) {
     body {
         font-size: small;
@@ -173,9 +162,37 @@ section {
 
 }
 
+
+@media (max-width: 439px) {
+    body {
+        padding: 20px 25px;
+        max-width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 361px) {
+    .title {
+        letter-spacing: 2px;
+        font-size: 25px;
+
+    }
+
+}
+
+
+
+
+
 @media (max-width: 285px) {
     body {
         font-size: x-small;
+    }
+    .title {
+        font-size: 20px;
+
     }
 
     section {
@@ -185,5 +202,13 @@ section {
     }
 
 
+
+}
+
+@media (max-width: 258px) {
+    .title {
+        font-size: 17px;
+
+    }
 
 }
