@@ -128,16 +128,16 @@ type Response struct {
 }
 
 func handleIpAddressDistance(w http.ResponseWriter, r *http.Request) {
-	ipAddress := r.PathValue("address")
+	// ipAddress := r.PathValue("address")
 	url := "http://ip-api.com/json/"
 	// fmt.Println(r.RemoteAddr)
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 	userIP := net.ParseIP(ip)
-	fmt.Println(userIP)
+	// fmt.Println(userIP)
 
 	laLat, laLon := 34.052235, -118.243683
 
-	locationResp, err := http.Get(fmt.Sprint(url, ipAddress))
+	locationResp, err := http.Get(fmt.Sprint(url, ip))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
