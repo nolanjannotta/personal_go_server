@@ -137,7 +137,7 @@ func handleIpAddressDistance(w http.ResponseWriter, r *http.Request) {
 
 	laLat, laLon := 34.052235, -118.243683
 
-	locationResp, err := http.Get(fmt.Sprint(url, ip))
+	locationResp, err := http.Get(fmt.Sprint(url, userIP))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
