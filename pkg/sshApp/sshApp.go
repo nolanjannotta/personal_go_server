@@ -27,39 +27,27 @@ const (
 )
 
 type model struct {
-	term        string
-	profile     string
-	width       int
-	height      int
-	renderer    *lipgloss.Renderer
-	footerStyle lipgloss.Style
-	// helpStyle   lipgloss.Style
-
-	emailLayout lipgloss.Style
-	viewport    viewport.Model
-
-	nameInput textinput.Model
-	fromInput textinput.Model
-	msgInput  textarea.Model
-
-	textInputIndex  int
-	content         string
-	pageName        string
-	emailSuccessMsg string
-	markdown        map[string]string
-	footer          help.Model
+	viewport                                          viewport.Model
+	content, pageName, emailSuccessMsg, term, profile string
+	width, height, textInputIndex                     int
+	renderer                                          *lipgloss.Renderer
+	footerStyle, emailLayout                          lipgloss.Style
+	nameInput, fromInput                              textinput.Model
+	msgInput                                          textarea.Model
+	markdown                                          map[string]string
+	footer                                            help.Model
 }
 
 func SetUp() *ssh.Server {
 
-	home, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
+	// home, err := os.UserHomeDir()
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	s, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
-		wish.WithHostKeyPath(fmt.Sprint(home, "/.ssh/personal-server")),
+		// wish.WithHostKeyPath(fmt.Sprint(home, "/.ssh/personal-server")),
 		wish.WithMiddleware(
 			bubbletea.Middleware(teaHandler),
 			activeterm.Middleware(),

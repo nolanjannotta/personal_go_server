@@ -34,8 +34,8 @@ Thanks for checking it out!
 ⊳ snake (press 's')  ➟ Playable game of Snake on Ethereum mainnet.
 ⊳ keyboard ⌕   ➟ Playable and recordable musical keyboard on Arbitrum L2. 
 ⊳ recursive trees: https://recursivetrees.xyz ➟ Ultra dynamic "growing" trees on Ethereum mainnet. All proceeds donated to One Tree Planted.
-⊳ onchain experiments: https://onchainexperiments.xyz ➟ A prototype platform for artists and creators to mint and share their own onchain art on Base L2. 
-
+⊳ onchain experiments: https://onchainexperiments.xyz ➟ A prototype platform for artists and creators to mint and share their own onchain art on Base L2. 
+⊳ terminal apps: fun tui projects using charm and Golang. [TODO]
 
 ⊚ PHYSICAL
 
