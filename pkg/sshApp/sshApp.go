@@ -40,14 +40,14 @@ type model struct {
 
 func SetUp() *ssh.Server {
 
-	// home, err := os.UserHomeDir()
-	// if err != nil {
-	// 	panic(err)
-	// }
+	home, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
 
 	s, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
-		// wish.WithHostKeyPath(fmt.Sprint(home, "/.ssh/personal-server")),
+		wish.WithHostKeyPath(fmt.Sprint(home, "/.ssh/personal-server")),
 		wish.WithMiddleware(
 			bubbletea.Middleware(teaHandler),
 			activeterm.Middleware(),
