@@ -14,10 +14,7 @@ Some of my interests include blockchain, coding, terminal apps, generative art, 
 life goal: Build cool things that people enjoy.
 
 
-
-This site is a work in progress and acts as a resume/portfolio. Below you will find links and info to learn more about my previous and future projects.
-
-
+---
 
 Are you tired of awesome terminal UIs? Great news, this page is also available on your favorite web browser! Simply type ********.*** [TODO] into your search bar and hit enter.
 
