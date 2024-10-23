@@ -191,30 +191,15 @@
 <script type="text/javascript" type="module">
 
   const element = document.getElementById("distance")
-  // geoLocation = window.location.origin
-  // const url = window.GeolocationCoordinates()
-  
-  // fetch(window.location.origin + "/ipdistance").then(response => {
-  //   if (response.ok) {      
-  //     response.json().then((json)=>{
-  //       console.log(json)
-  //       element.textContent = json.miles + " miles away"
-  //     })
-  //   }
-    
-  // })
-
 
   async function getDistance() {
     const laLat = 34.052235
-    const laLon =  -118.243683
+    const laLon = -118.243683
 
     const clientIPResp = await fetch("https://api.ipify.org?format=json")
     const clientIPJson = await clientIPResp.json()
-    // console.log(clientIPJson)
     const clientLatLonResp = await fetch("http://ip-api.com/json/" + clientIPJson.ip)
     const clientLatLonJson = await clientLatLonResp.json()
-    // console.log(clientLatLonJson)
 
     let lat1,lat2,lon1,lon2
 
@@ -233,6 +218,5 @@
   window.onload = getDistance()
 
 </script>
-<!-- <script src="./skew.js" type="text/javascript"></script> -->
 
 </html>

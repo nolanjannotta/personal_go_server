@@ -59,7 +59,7 @@ func SetUp() *ssh.Server {
 
 	s, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
-		wish.WithHostKeyPath(fmt.Sprint(home, "/.ssh/nolanj")),
+		wish.WithHostKeyPath(fmt.Sprint(home, "/.ssh/personal-server")),
 		wish.WithMiddleware(
 			bubbletea.Middleware(teaHandler),
 			activeterm.Middleware(),
