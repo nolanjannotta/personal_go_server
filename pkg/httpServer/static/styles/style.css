@@ -132,7 +132,9 @@ footer {
 
 
 .distance {
-    font-size:12px
+    font-size: 12px;
+    word-spacing: -3px;
+
 }
 
 
