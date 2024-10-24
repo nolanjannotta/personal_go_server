@@ -204,8 +204,8 @@
     lon2 = clientLatLonJson.lon * Math.PI / 180;
 
     const km = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * 6371;
-    const miles = Math.floor(km * 0.621371)
-    element.textContent = miles + " miles away"
+    // const miles = Math.floor(km * 0.621371)
+    element.textContent = Math.floor(km) + " km away"
 
 
   }
