@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="nj" />
+    <title>calculator</title>
+    <link rel="icon" href='data:image/svg+xml;base64,PHN2ZyBpZD0ic3ZnIiB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMjAnIGhlaWdodD0nMTIwJz4gPHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgeD0iNjAiIHk9IjYwIiBzdHlsZT0iZm9udC1zaXplOiAxMjBweDsiIGZpbGw9IiNmOGY0ZTkiPiAmIzQ2MDsgPC90ZXh0PiA8L3N2Zz4=' type="image/svg+xml">
+    <link href="styles/style.css" rel="stylesheet" />
+  </head>
+
+<body>
+
+
+    <main>
+        <header>
+            <!-- <h1 class="title">&nopf;&oopf;&lopf;&aopf;&nopf; &jopf;&aopf;&nopf;&nopf;&oopf;&topf;&topf;&aopf;</h1> -->
+            <h1 class="title">NOLAN JANNOTTA</h1>
+    
+            <nav>
+                <a href="/">&#8656; home</a>
+    
+            </nav>
+        </header>
+        <br/>
+        <section class="about">
+            <h1>&#8858; Calculator</h1>
+            <div class="inner-section">
+                <ul class="list">
+                    <li id="deployedAt">&nbsp;deployed: <a href="https://etherscan.io/tx/0x6e7df2403c18ddd08f0ec4a6f1cdab2ecc41b4218d3824f5bb80a4d09bc80a46" target="_blank">Mar-30-2022</a> <small class="vintage-score" id="vintageScore"></small>  </li>
+                    <!-- <li>&nbsp;mainnet</li> -->
+                    <li>&nbsp;<a href="https://etherscan.io/address/0xc3b88a12d8cda6b9802c30be4bb18bdd1828b317" target="_blank">etherscan &#8599;</a></li>
+                    <li>&nbsp;<a href="https://opensea.io/collection/calculator-v4" target="_blank">opensea &#8599;</a></li>
+                </ul> 
+                </div>
+            <span class="corners">
+                <span>&#8988;</span>
+                <span>&#8989;</span>
+              </span>
+              <div class="inner-section">
+            <p>The first finished project that I ever deployed on mainnet. A fully functioning, fully onchain calculator. comes in 5 colors schemes. 
+                "Onchain" in this case means that the SVG code 
+                and javascript code are stored in the smart contract. Once the SVG is returned from the contract, 
+                your browser handles the rest and runs the logic. 9/10 collectors recommend minting this token.</p>
+            <!-- <p>"wow, really cool. Arguably the first nft to solve real world [math] problems" -nolan</p> -->
+            <p><b>note: </b>This contract does not include animation_url in the metadata, this means the calculator does not work on opensea. Minting through this site will randomly choose colors for you. The original (likely broken) frontend lives <a>here &#8599;</a>. Fixing it is on the todo list.</p>
+
+            <!-- <p><b> &#10036;note:&#10036;</b></p> -->
+            </div>
+            <span class="corners">
+                <span>&#8990;</span>
+                <span>&#8991;</span>
+              </span>
+
+        </section>
+
+        <section id="demo">
+            <div class="inner-section">
+            <span style="font-size: x-large;">&dopf; &eopf; &mopf; &oopf; &#8595;</span>
+            <br/>
+            <object width="375" id="image"></object>
+            <p id="supply">loading...</p>
+        </div>
+        </section>
+        
+        <section id="controls">
+            <div class="inner-section">
+            <div id="whenDisconnected">
+                <span id="connectButtons">
+                    <button id="metamask">metamask</button> |
+                    <button id="coinbaseWallet">coinbase wallet</button>
+                </span>
+            </div>
+                
+                
+
+            <div style="display:none" id="whenConnected">
+                <span > 
+                    <small id="account"></small>
+                    <button id="disconnect"><small>&#10214;disconnect&#10215;</small></button>
+                    <button id="switchChains"><small>&#10214;switch chains&#10215;</small></button>
+                </span>
+
+                <br/>
+                <span>
+                    <small id="balance">balance:</small>
+                </span>
+                <br/>
+                <br/>
+
+                mint:
+                <br/>
+                <span id="mintButtons">
+                    <span id="decrement" class="inputButtons"><small></small>&#10647;-&#10648;</span>
+                    <span id="mintAmount">1</span>
+                    <span id="increment" class="inputButtons">&#10647;+&#10648;</span>
+                    &nbsp;&nbsp;
+                    <span id="price"> &#10214;price:&#10215;</span> &nbsp;&nbsp;
+                    <button id="mint">&#10214;mint&#10215;</button>             
+                </span>
+                <small><p id="mintMessage"></p></small>
+            </div>
+</div>
+        </section>
+        <p style="font-size: x-small;">¹ 'vintage rating' is a made up metric. Found by the following equation: (CryptoPunks age / Calculator age) * 10 </p>
+    </main>
+
+    <footer>
+        <small>made with ☠ by nolan</small>
+      </footer>
+</body>
+
+<script type="module">
+    import { createPublicClient, http, getContract, formatEther,parseEther,BaseError, ContractFunctionRevertedError   } from 'https://esm.sh/viem'
+    import { mainnet } from 'https://esm.sh/viem/chains'
+    import { createConfig,fallback, readContracts,readContract,  connect, disconnect, getAccount,simulateContract, writeContract,getBalance,waitForTransactionReceipt, switchChain,watchAccount  } from 'https://esm.sh/@wagmi/core@2.x'
+    import { injected, metaMask,coinbaseWallet} from 'https://esm.sh/@wagmi/connectors'
+
+    const accountElement = document.getElementById('account');
+    const mintAmount = document.getElementById('mintAmount');
+    const whenConnected = document.getElementById('whenConnected');
+    const whenDisconnected = document.getElementById('whenDisconnected');
+
+
+
+
+
+    let calculatorPrice;
+
+    const contract = {
+        address: "0xC3B88A12D8Cda6b9802C30be4bb18BDd1828b317",
+        abi: [
+            {
+                inputs: [
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    }
+                ],
+                name: "tokenURI",
+                outputs: [
+                    {
+                        internalType: "string",
+                        name: "",
+                        type: "string"
+                    }
+                ],
+                stateMutability: "view",
+                type: "function"
+            },
+            {
+                inputs: [],
+                name: "totalSupply",
+                outputs: [
+                    {
+                        internalType: "uint256",
+                        name: "",
+                        type: "uint256"
+                    }
+                ],
+                stateMutability: "view",
+                type: "function"
+            },
+            {
+                inputs: [],
+                name: "maxSupply",
+                outputs: [
+                    {
+                        internalType: "uint256",
+                        name: "",
+                        type: "uint256"
+                    }
+                ],
+                stateMutability: "view",
+                type: "function"
+            },
+            {
+                inputs: [],
+                name: "price",
+                outputs: [
+                    {
+                        internalType: "uint256",
+                        name: "",
+                        type: "uint256"
+                    }
+                ],
+                stateMutability: "view",
+                type: "function"
+            },
+            {inputs:[{internalType:"uint256[]",name:"schemeIds",type:"uint256[]"}],name:"mint",outputs:[],stateMutability:"payable",type:"function"}
+
+        ]
+    }
+    
+    
+    const config = createConfig({
+        chains: [mainnet],
+        transports: {
+            [mainnet.id]: fallback([
+                http("https://rpc.flashbots.net"),
+                http("https://eth.llamarpc.com"),
+                http("https://eth-pokt.nodies.app"),
+                http("https://eth.drpc.org"),
+                http("https://rpc.mevblocker.io"),
+                http("https://ethereum-rpc.publicnode.com"),
+                http("https://1rpc.io/eth"),
+
+            ])
+        }
+
+    })
+
+    const unwatchAccount = watchAccount(config, {
+            onChange: async (account) => {
+                console.log(account)
+                if (account.chainId === 1) {
+                    document.getElementById('switchChains').style.display = "none"
+                    document.getElementById('mint').disabled = false
+                    document.getElementById('mint').style.textDecoration = "none"
+                    document.getElementById('mintMessage').textContent = ""
+                }
+                else {
+                    document.getElementById('switchChains').style.display = "inline"
+                    document.getElementById('mint').disabled = true
+                    document.getElementById('mint').style.textDecoration = "line-through"
+                    document.getElementById('mintMessage').textContent = "please switch to mainnet to mint"
+
+                }
+
+                if (account.isConnected) {
+                    whenConnected.style.display = "inline"
+                    whenDisconnected.style.display = "none"
+                    const balance = await getBalance(config, { address: account.addresses[0] })
+                    document.getElementById('balance').textContent = `balance: ${balance.formatted} eth`
+                    accountElement.textContent = `connected as: \u27E6${account.addresses[0]}\u27E7 \u25CB `
+                    document.getElementById('price').textContent = `\u27E6price: ${formatEther(calculatorPrice)} eth\u27E7`
+                }
+            },
+        })
+
+
+    // async function updatePrice(amount) {
+    //     const account = await getAccount(config)
+
+    //     const results = await readContract(config, {
+    //         ...contract,
+    //         functionName: 'price',
+        
+
+    //     })
+
+    //     document.getElementById('price').textContent = `\u27E6price: ${formatEther(results)} eth\u27E7`
+    // }
+
+
+   
+
+    async function connectWallet(connector, options = {}) {
+        const result = await connect(config, {
+            connector: connector(options)
+        })
+        if(result.accounts.length === 0) {
+            return
+        }
+
+        whenConnected.style.display = "inline"
+        whenDisconnected.style.display = "none"
+
+        const balance = await getBalance(config, {address: result.accounts[0]})
+        document.getElementById('balance').textContent = `balance: ${balance.formatted} eth`
+
+        accountElement.textContent = `connected as: \u27E6${result.accounts[0]}\u27E7 \u25CB `        
+        document.getElementById('price').textContent = `\u27E6price: ${formatEther(calculatorPrice)} eth\u27E7`
+
+    }
+
+
+
+    window.onload = async () =>  {
+        // unwatchAccount();
+        document.getElementById('metamask').onclick = async () => await connectWallet(injected)
+        document.getElementById('coinbaseWallet').onclick = async () => await connectWallet(coinbaseWallet, {appName: 'snake',preference: "eoaOnly"})
+        document.getElementById('disconnect').onclick = async () => {
+
+            await disconnect(config, {connector: config.connectors[0]})
+            // unwatchAccount();
+            whenConnected.style.display = "none"
+            whenDisconnected.style.display = "inline"
+        }
+
+        document.getElementById('switchChains').onclick = async () => {
+            await switchChain(config, { chainId: 1 })
+            document.getElementById('switchChains').innerHTML = "";
+
+        }
+
+        const punksAge = Date.now()/1000 -  1496967770;
+        const calculatorAge = Date.now()/1000 -  1648612862;
+        document.getElementById('vintageScore').textContent = `(vintage rating: ${(calculatorAge/punksAge * 10).toFixed(2)}) ¹`
+        document.getElementById('vintageScore').style.fontSize = ".6em"
+
+
+        document.getElementById('increment').onclick = () => {
+            mintAmount.textContent = Number(mintAmount.textContent) < 5 ?  Number(mintAmount.textContent) + 1 : 5
+            document.getElementById("price").textContent = `\u27E6price: ${formatEther(calculatorPrice * BigInt(mintAmount.textContent))} eth\u27E7`
+        }
+        document.getElementById('decrement').onclick = () => {
+            mintAmount.textContent = Number(mintAmount.textContent) > 1 ? Number(mintAmount.textContent) - 1 : 1
+            document.getElementById("price").textContent = `\u27E6price: ${formatEther(calculatorPrice * BigInt(mintAmount.textContent))} eth\u27E7`
+        }
+
+        document.getElementById("mint").onclick = async () => {
+            const amount = Number(mintAmount.textContent)
+            if (amount < 1 || amount > 5) {
+                // handle error case
+                return
+
+            }
+
+            const inputArr = []
+
+            for (let i = 0; i < amount; i++) {
+                inputArr.push(BigInt(Math.floor((Math.random() * 5) + 1)))
+
+            }
+
+            const account = await getAccount(config)
+
+
+            try {
+                const { request } = await simulateContract(config, {
+                    ...contract,
+                    functionName: 'mint',
+                    args: [inputArr],
+                    value: calculatorPrice * BigInt(inputArr.length),
+                })
+
+                const result = await writeContract(config, request)
+                document.getElementById('mintMessage').innerHTML = `<p> <a href="https://etherscan.io/tx/${result}" target="_blank">transaction submitted!</a> refresh page for updates. </p>`
+
+
+            } catch (err) {
+
+                document.getElementById('mintMessage').textContent = "error while simulating transaction. Please try again later."
+
+            }
+
+        }
+
+
+        const results = await readContracts(config, {
+            contracts: [
+
+                {
+                    ...contract,
+                    functionName: 'totalSupply',
+                },
+                {
+                    ...contract,
+                    functionName: 'maxSupply',
+                },
+                {
+                    ...contract,
+                    functionName: 'price',
+                }
+            ]
+        })
+         
+
+        const randomId = Math.floor(Number(results[0].result) * Math.random() + 1)
+
+        const demo = await readContract(config, {
+            ...contract,
+            functionName: 'tokenURI',
+            args: [randomId]
+        })
+
+
+        calculatorPrice = results[2].result
+        document.getElementById("price").textContent = `\u27E6price: ${formatEther(calculatorPrice * BigInt(mintAmount.textContent))} eth\u27E7`
+
+
+        const response = await fetch(demo)
+        const json = await response.json()
+
+        document.getElementById('supply').textContent = `supply: ${Number(results[0].result)}/${Number(results[1].result)} | price: ${formatEther(calculatorPrice)} eth`
+        document.getElementById('image').setAttribute('data', json.image)
+
+        
+    };
+
+
+
+
+
+</script>
+<script src="./helloThere.js" type="text/javascript"></script>
+
+</html>

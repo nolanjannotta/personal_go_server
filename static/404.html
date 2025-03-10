@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="nj" />
+    <title>nj</title>
+    <link rel="icon"
+        href='data:image/svg+xml;base64,PHN2ZyBpZD0ic3ZnIiB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMjAnIGhlaWdodD0nMTIwJz4gPHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgeD0iNjAiIHk9IjYwIiBzdHlsZT0iZm9udC1zaXplOiAxMjBweDsiIGZpbGw9IiNmOGY0ZTkiPiAmIzQ2MDsgPC90ZXh0PiA8L3N2Zz4='
+        type="image/svg+xml">
+    <link href="styles/style.css" rel="stylesheet" />
+</head>
+
+<body>
+    <header>
+        <h1 class="title">NOLAN JANNOTTA</h1>
+
+        <nav>
+            <a href="/">&#8656; home</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="about">
+
+
+            <h1>&#8858; 404 - page not found.</h1>
+            <span class="corners">
+                <span>&#8988;</span>
+                <span>&#8989;</span>
+            </span>
+
+            <div class="inner-section">
+                <p>hmmm 🤔 nothing to see here...</p>
+                <p>returning home in: <span id="counter">5</span> sec</p>
+            </div>
+            <span class="corners">
+                <span>&#8990;</span>
+                <span>&#8991;</span>
+            </span>
+        </section>
+    </main>
+
+    <footer>
+        <small>made with ☠ by nolan</small>
+    </footer>
+</body>
+
+
+<script>
+    let seconds = 4
+    let timer = setInterval(() => {
+        document.getElementById('counter').textContent = seconds
+        seconds--
+
+        if (seconds === -1) {
+            clearInterval(timer);
+
+            window.location.href = '/'
+        }
+    }, 1000)
+</script>
+<script src="./helloThere.js" type="text/javascript"></script>
+
+</html>
